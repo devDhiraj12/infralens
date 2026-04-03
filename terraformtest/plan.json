@@ -1,0 +1,194 @@
+﻿{
+  "format_version": "1.2",
+  "terraform_version": "1.9.5",
+  "resource_changes": [
+    {
+      "address": "aws_instance.web_server",
+      "name": "web_server",
+      "type": "aws_instance",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "subnet_id": "subnet-12345",
+          "user_data": "password=mysecret123"
+        }
+      }
+    },
+    {
+      "address": "aws_instance.old_server",
+      "name": "old_server",
+      "type": "aws_instance",
+      "change": {
+        "actions": ["delete"],
+        "before": {
+          "instance_type": "t2.micro",
+          "ami": "ami-0c55b159cbfafe1f0"
+        },
+        "after": null
+      }
+    },
+    {
+      "address": "aws_db_instance.database",
+      "name": "database",
+      "type": "aws_db_instance",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "instance_class": "db.t3.micro",
+          "engine": "mysql",
+          "allocated_storage": 20,
+          "publicly_accessible": true,
+          "storage_encrypted": false,
+          "deletion_protection": false,
+          "password": "hardcoded_password_123"
+        }
+      }
+    },
+    {
+      "address": "aws_security_group.web_sg",
+      "name": "web_sg",
+      "type": "aws_security_group",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "name": "web-sg",
+          "ingress": [
+            {
+              "from_port": 22,
+              "to_port": 22,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": []
+            },
+            {
+              "from_port": 80,
+              "to_port": 80,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "address": "aws_s3_bucket.assets",
+      "name": "assets",
+      "type": "aws_s3_bucket",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "bucket": "my-app-assets",
+          "acl": "public-read",
+          "force_destroy": true,
+          "versioning": [{ "enabled": false }]
+        }
+      }
+    },
+    {
+      "address": "aws_iam_role.app_role",
+      "name": "app_role",
+      "type": "aws_iam_role",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "name": "app-role",
+          "assume_role_policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"sts:AssumeRole\"}]}"
+        }
+      }
+    },
+    {
+      "address": "aws_iam_policy.admin_policy",
+      "name": "admin_policy",
+      "type": "aws_iam_policy",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "name": "admin-policy",
+          "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+        }
+      }
+    },
+    {
+      "address": "aws_nat_gateway.nat",
+      "name": "nat",
+      "type": "aws_nat_gateway",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "subnet_id": "subnet-12345"
+        }
+      }
+    },
+    {
+      "address": "aws_lb.app_lb",
+      "name": "app_lb",
+      "type": "aws_lb",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "name": "app-lb",
+          "internal": false,
+          "load_balancer_type": "application"
+        }
+      }
+    },
+    {
+      "address": "aws_eks_cluster.main",
+      "name": "main",
+      "type": "aws_eks_cluster",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "name": "main-cluster",
+          "vpc_config": [
+            {
+              "endpoint_public_access": true,
+              "endpoint_private_access": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "address": "aws_lambda_function.api",
+      "name": "api",
+      "type": "aws_lambda_function",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "function_name": "api-handler",
+          "runtime": "python3.11",
+          "memory_size": 128
+        }
+      }
+    },
+    {
+      "address": "aws_elasticache_cluster.cache",
+      "name": "cache",
+      "type": "aws_elasticache_cluster",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "cluster_id": "app-cache",
+          "engine": "redis",
+          "node_type": "cache.t3.micro",
+          "num_cache_nodes": 1
+        }
+      }
+    }
+  ]
+}

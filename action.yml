@@ -1,0 +1,21 @@
+name: 'InfraLens'
+description: 'Analyzes Terraform plan and posts infrastructure impact summary as a PR comment'
+author: 'InfraLens'
+
+inputs:
+  plan-json-path:
+    description: 'Path to the terraform show -json output file'
+    required: true
+    default: 'plan.json'
+  github-token:
+    description: 'GitHub token for posting PR comments'
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    PLAN_JSON_PATH: ${{ inputs.plan-json-path }}
+    GITHUB_TOKEN: ${{ inputs.github-token }}
+    GITHUB_REPOSITORY: ${{ github.repository }}
+    GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
