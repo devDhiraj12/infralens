@@ -232,7 +232,9 @@ InfraLens works with AWS CloudFormation changesets too, not just Terraform.
 
 ## Running Locally
 
-Generate a plan JSON from any Terraform project:
+You can run InfraLens locally before pushing to GitHub. It prints the full PR comment as a terminal preview without posting anything.
+
+**Step 1 — Generate a Terraform plan JSON:**
 
 ```bash
 terraform init
@@ -240,21 +242,80 @@ terraform plan -out=plan.bin
 terraform show -json plan.bin > plan.json
 ```
 
-Install dependencies and run:
+On Windows PowerShell:
+```powershell
+terraform plan -out="plan.bin"
+terraform show -json plan.bin | Out-File -Encoding utf8 plan.json
+```
+
+**Step 2 — Install dependencies:**
 
 ```bash
 pip install requests boto3 pyyaml
+```
+
+**Step 3 — Set environment variables and run:**
+
+```bash
 export PLAN_JSON_PATH=plan.json
 export AWS_ACCESS_KEY_ID=your-key
 export AWS_SECRET_ACCESS_KEY=your-secret
 export AWS_DEFAULT_REGION=us-east-1
-export INFRALENS_RULES_PATH=.infralens.yml   # optional
 python src/main.py
 ```
 
-The full PR comment renders in your terminal as a preview.
+On Windows PowerShell:
+```powershell
+$env:PLAN_JSON_PATH="path\to\plan.json"
+$env:AWS_ACCESS_KEY_ID="your-key"
+$env:AWS_SECRET_ACCESS_KEY="your-secret"
+$env:AWS_DEFAULT_REGION="us-east-1"
+python src/main.py
+```
 
 ---
+
+## Environment Variables Reference
+
+These are all the environment variables InfraLens reads — both in CI and locally. In the GitHub Action, inputs like `plan-json-path` and `block-on-high` map to these automatically. When running locally you set them yourself.
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `PLAN_JSON_PATH` | Yes | `plan.json` | Path to your Terraform plan JSON or CloudFormation changeset JSON |
+| `PLAN_TYPE` | No | `terraform` | Set to `cloudformation` if using a CloudFormation changeset |
+| `BLOCK_ON_HIGH` | No | `true` | Set to `false` to skip CI failure on HIGH findings — useful when testing locally or onboarding |
+| `INFRALENS_RULES_PATH` | No | `.infralens.yml` | Path to your custom rules file. If the file doesn't exist, custom rules are skipped silently |
+| `AWS_ACCESS_KEY_ID` | No | — | AWS credentials for live Pricing API calls. Without these, InfraLens falls back to a built-in price table |
+| `AWS_SECRET_ACCESS_KEY` | No | — | AWS credentials |
+| `AWS_DEFAULT_REGION` | No | `us-east-1` | Region used for cost estimation. Set this to match where you're deploying |
+| `GITHUB_TOKEN` | CI only | — | Auto-provided by GitHub Actions. Not needed locally — without it InfraLens just prints the preview |
+| `GITHUB_REPOSITORY` | CI only | — | Auto-provided by GitHub Actions |
+| `GITHUB_PR_NUMBER` | CI only | — | Auto-provided by GitHub Actions |
+
+**Common local testing scenarios:**
+
+Test without AWS credentials (uses fallback pricing):
+```powershell
+$env:PLAN_JSON_PATH="plan.json"
+$env:BLOCK_ON_HIGH="false"
+python src/main.py
+```
+
+Test with custom rules:
+```powershell
+$env:PLAN_JSON_PATH="plan.json"
+$env:INFRALENS_RULES_PATH=".infralens.yml"
+python src/main.py
+```
+
+Test CloudFormation changeset:
+```powershell
+$env:PLAN_JSON_PATH="changeset.json"
+$env:PLAN_TYPE="cloudformation"
+python src/main.py
+```
+
+
 
 ## Project Structure
 
