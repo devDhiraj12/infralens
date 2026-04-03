@@ -270,10 +270,120 @@ def scan_security(summary: dict, plan_raw: dict) -> list:
                     "type": rtype,
                     "severity": risk["severity"],
                     "risk": risk["risk"],
+                    "source": "built-in",
                 })
+
+    # Run custom rules from .infralens.yml if present
+    custom_findings = _run_custom_rules(summary, raw_config_map)
+    findings.extend(custom_findings)
 
     # Sort by severity: HIGH first, then MEDIUM, then LOW
     severity_order = {SEVERITY_HIGH: 0, SEVERITY_MEDIUM: 1, SEVERITY_LOW: 2}
     findings.sort(key=lambda x: severity_order.get(x["severity"], 3))
+
+    return findings
+
+
+def _get_nested_value(config: dict, field_path: str):
+    """Resolve dot-notation field path like 'versioning.enabled' from config dict."""
+    keys = field_path.split(".")
+    value = config
+    for key in keys:
+        if isinstance(value, list):
+            value = value[0] if value else {}
+        if not isinstance(value, dict):
+            return None
+        value = value.get(key)
+    return value
+
+
+def _run_custom_rules(summary: dict, raw_config_map: dict) -> list:
+    """Load .infralens.yml from repo root and run custom rules."""
+    import os
+
+    rules_file = os.environ.get("INFRALENS_RULES_PATH", ".infralens.yml")
+
+    if not os.path.exists(rules_file):
+        return []
+
+    try:
+        import yaml
+    except ImportError:
+        print("  [custom rules] PyYAML not installed — skipping custom rules.")
+        return []
+
+    try:
+        with open(rules_file, "r") as f:
+            config = yaml.safe_load(f)
+    except Exception as e:
+        print(f"  [custom rules] Failed to parse {rules_file}: {e}")
+        return []
+
+    rules = config.get("rules", [])
+    if not rules:
+        return []
+
+    severity_map = {
+        "HIGH": SEVERITY_HIGH,
+        "MEDIUM": SEVERITY_MEDIUM,
+        "LOW": SEVERITY_LOW,
+    }
+
+    findings = []
+
+    for action in ["create", "update", "replace"]:
+        for resource in summary["changes"][action]:
+            rtype = resource.get("type")
+            address = resource.get("address")
+            raw_config = raw_config_map.get(address, {})
+
+            for rule in rules:
+                # Match resource type
+                rule_resource = rule.get("resource")
+                if rule_resource and rule_resource != rtype:
+                    continue
+
+                field = rule.get("field")
+                expected = rule.get("value")
+                severity_str = str(rule.get("severity", "MEDIUM")).upper()
+                severity = severity_map.get(severity_str, SEVERITY_MEDIUM)
+                message = rule.get("message", f"Custom rule violation on field '{field}'")
+
+                if field is None:
+                    # Rule without a field check — always fires for matching resource type
+                    findings.append({
+                        "address": address,
+                        "type": rtype,
+                        "severity": severity,
+                        "risk": f"[Custom] {message}",
+                        "source": "custom",
+                    })
+                    continue
+
+                actual = _get_nested_value(raw_config, field)
+
+                # Evaluate the rule
+                violated = False
+                operator = rule.get("operator", "equals")
+
+                if operator == "equals":
+                    violated = actual != expected
+                elif operator == "not_equals":
+                    violated = actual == expected
+                elif operator == "contains":
+                    violated = expected not in (actual or "")
+                elif operator == "exists":
+                    violated = actual is None
+                elif operator == "not_exists":
+                    violated = actual is not None
+
+                if violated:
+                    findings.append({
+                        "address": address,
+                        "type": rtype,
+                        "severity": severity,
+                        "risk": f"[Custom] {message}",
+                        "source": "custom",
+                    })
 
     return findings

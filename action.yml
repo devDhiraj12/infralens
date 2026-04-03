@@ -8,21 +8,31 @@ branding:
 
 inputs:
   plan-json-path:
-    description: 'Path to the terraform show -json output file'
+    description: 'Path to the terraform show -json or CloudFormation changeset JSON file'
     required: true
     default: 'plan.json'
+  plan-type:
+    description: 'Type of IaC plan — terraform or cloudformation'
+    required: false
+    default: 'terraform'
   github-token:
     description: 'GitHub token for posting PR comments'
     required: true
+  block-on-high:
+    description: 'Fail the CI check if HIGH severity security findings exist'
+    required: false
+    default: 'true'
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
   env:
     PLAN_JSON_PATH: ${{ inputs.plan-json-path }}
+    PLAN_TYPE: ${{ inputs.plan-type }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
     GITHUB_REPOSITORY: ${{ github.repository }}
     GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
     AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
     AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+    BLOCK_ON_HIGH: ${{ inputs.block-on-high }}

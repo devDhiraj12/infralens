@@ -1,0 +1,14 @@
+rules:
+  - resource: aws_s3_bucket
+    field: versioning.enabled
+    operator: equals
+    value: true
+    severity: HIGH
+    message: "S3 versioning must be enabled per company policy"
+
+  - resource: aws_db_instance
+    field: multi_az
+    operator: equals
+    value: true
+    severity: MEDIUM
+    message: "RDS Multi-AZ must be enabled for production"
