@@ -99,7 +99,7 @@ def build_markdown(summary: dict, costs: dict = None, findings: list = None) -> 
         lines.append("")
 
     lines.append("---")
-    lines.append("*Posted by [InfraLens](https://github.com/your-org/infralens)*")
+    lines.append("*Posted by [InfraLens](https://github.com/devDhiraj12/infralens)*")
 
     return "\n".join(lines)
 
