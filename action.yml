@@ -1,6 +1,10 @@
 name: 'InfraLens'
-description: 'Analyzes Terraform plan and posts infrastructure impact summary as a PR comment'
-author: 'InfraLens'
+description: 'Analyzes Terraform plan and posts resource changes, cost estimates, and security risks as a PR comment'
+author: 'devDhiraj12'
+
+branding:
+  icon: 'eye'
+  color: 'blue'
 
 inputs:
   plan-json-path:
@@ -19,3 +23,6 @@ runs:
     GITHUB_TOKEN: ${{ inputs.github-token }}
     GITHUB_REPOSITORY: ${{ github.repository }}
     GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+    AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+    AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}

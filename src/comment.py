@@ -3,7 +3,7 @@ import requests
 
 
 GITHUB_API = "https://api.github.com"
-COMMENT_MARKER = "<!-- infraguard-comment -->"
+COMMENT_MARKER = "<!-- infralens-comment -->"
 
 
 def build_markdown(summary: dict, costs: dict = None, findings: list = None) -> str:
@@ -115,7 +115,6 @@ def post_comment(summary: dict, costs: dict = None, findings: list = None):
         "X-GitHub-Api-Version": "2022-11-28",
     }
 
-    # Check if we already posted a comment and update it instead of spamming
     comments_url = f"{GITHUB_API}/repos/{repository}/issues/{pr_number}/comments"
     existing = requests.get(comments_url, headers=headers)
     existing.raise_for_status()
