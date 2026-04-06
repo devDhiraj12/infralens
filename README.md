@@ -73,6 +73,8 @@ InfraLens runs automatically and posts the comment on the PR.
 
 ## What the PR Comment Looks Like
 
+![InfraLens in action — real PR comment on a Terraform project](./infralens-screenshot.png)
+
 ```
 🔍 InfraLens — Terraform Impact Summary
 
