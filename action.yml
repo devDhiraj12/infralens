@@ -18,10 +18,30 @@ inputs:
   github-token:
     description: 'GitHub token for posting PR comments'
     required: true
+  github-repository:
+    description: 'GitHub repository in owner/repo format'
+    required: false
+    default: ${{ github.repository }}
+  github-pr-number:
+    description: 'Pull request number'
+    required: false
+    default: ${{ github.event.pull_request.number }}
   block-on-high:
     description: 'Fail the CI check if HIGH severity security findings exist'
     required: false
     default: 'true'
+  aws-access-key-id:
+    description: 'AWS Access Key ID for live cost estimation'
+    required: false
+    default: ''
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key for live cost estimation'
+    required: false
+    default: ''
+  aws-region:
+    description: 'AWS region for cost estimation'
+    required: false
+    default: 'us-east-1'
 
 runs:
   using: 'docker'
@@ -30,9 +50,9 @@ runs:
     PLAN_JSON_PATH: ${{ inputs.plan-json-path }}
     PLAN_TYPE: ${{ inputs.plan-type }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
-    GITHUB_REPOSITORY: ${{ github.repository }}
-    GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-    AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-    AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-    AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+    GITHUB_REPOSITORY: ${{ inputs.github-repository }}
+    GITHUB_PR_NUMBER: ${{ inputs.github-pr-number }}
+    AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+    AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+    AWS_DEFAULT_REGION: ${{ inputs.aws-region }}
     BLOCK_ON_HIGH: ${{ inputs.block-on-high }}
