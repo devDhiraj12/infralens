@@ -75,46 +75,6 @@ InfraLens runs automatically and posts the comment on the PR.
 
 ![InfraLens in action — real PR comment on a Terraform project](./infralens-screenshot.png)
 
-```
-🔍 InfraLens — Terraform Impact Summary
-
-| Action   | Count |
-|----------|-------|
-| 🟢 Create  | 4   |
-| 🟡 Update  | 1   |
-| 🔴 Destroy | 1   |
-| 🔁 Replace | 0   |
-
-🟢 Resources to Create
-| Resource Address          | Type              |
-|---------------------------|-------------------|
-| aws_instance.web_server   | aws_instance      |
-| aws_db_instance.database  | aws_db_instance   |
-| aws_nat_gateway.nat       | aws_nat_gateway   |
-
-💰 Estimated Cost Impact
-| Resource                  | Detail                    | Monthly Cost |
-|---------------------------|---------------------------|-------------|
-| aws_instance.web_server   | t3.medium                 | +$30.37     |
-| aws_db_instance.database  | db.t3.micro (mysql), 20GB | +$14.71     |
-| aws_nat_gateway.nat       | NAT Gateway               | +$32.85     |
-| aws_instance.old_server   | t2.micro                  | -$8.47      |
-
-Estimated monthly change: +$69.46/month
-
-🔒 Security Risk Detection
-
-🚨 3 HIGH severity issue(s) found. Do not merge without review.
-
-| Severity   | Resource                   | Risk                                     |
-|------------|----------------------------|------------------------------------------|
-| 🔴 HIGH    | aws_security_group.web_sg  | SSH (port 22) open to 0.0.0.0/0         |
-| 🔴 HIGH    | aws_db_instance.database   | RDS instance is publicly accessible      |
-| 🔴 HIGH    | aws_s3_bucket.assets       | [Custom] S3 versioning must be enabled   |
-| 🟡 MEDIUM  | aws_db_instance.database   | RDS storage encryption is not enabled    |
-| 🔵 LOW     | aws_s3_bucket.assets       | Versioning not enabled                   |
-```
-
 ---
 
 ## Features
