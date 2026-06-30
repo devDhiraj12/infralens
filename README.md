@@ -1,8 +1,6 @@
 # 🔍 InfraLens
 
-[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-InfraLens-blue?logo=github)](https://github.com/marketplace/actions/infralens)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Latest Release](https://img.shields.io/github/v/release/devDhiraj12/infralens)](https://github.com/devDhiraj12/infralens/releases)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-InfraLens-2088FF?style=flat-square&logo=github)](https://github.com/marketplace/actions/infralens) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE) [![Latest Release](https://img.shields.io/github/v/release/devDhiraj12/infralens?style=flat-square)](https://github.com/devDhiraj12/infralens/releases)
 
 **Know exactly what your Terraform or CloudFormation PR will do — before it merges.**
 

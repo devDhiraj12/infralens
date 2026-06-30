@@ -2,6 +2,10 @@
 
 ---
 
+You can also grab this workflow directly from the [GitHub Marketplace listing](https://github.com/marketplace/actions/infralens) using "Use latest version", or follow the manual steps below.
+
+---
+
 ### Step 1 — Add AWS credentials as GitHub secrets
 
 Go to your repo on GitHub:
