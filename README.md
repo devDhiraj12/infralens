@@ -1,6 +1,6 @@
 # 🔍 InfraLens
 
-[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-InfraLens-2088FF?style=flat-square&logo=github)](https://github.com/marketplace/actions/infralens) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE) [![Latest Release](https://img.shields.io/github/v/release/devDhiraj12/infralens?style=flat-square)](https://github.com/devDhiraj12/infralens/releases)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-InfraLens-2088FF?style=flat-square&logo=github)](https://github.com/marketplace/actions/infralens-iac-cost-security-scanner) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE) [![Latest Release](https://img.shields.io/github/v/release/devDhiraj12/infralens?style=flat-square)](https://github.com/devDhiraj12/infralens/releases)
 
 **Know exactly what your Terraform or CloudFormation PR will do — before it merges.**
 
@@ -14,7 +14,7 @@ Supports Terraform and AWS CloudFormation. AWS only for now — Azure/GCP suppor
 
 ## Quick Start
 
-You can find this action on the [GitHub Marketplace](https://github.com/marketplace/actions/infralens) and use the "Use latest version" button to auto-generate the snippet, or follow the steps below.
+You can find this action on the [GitHub Marketplace](https://github.com/marketplace/actions/infralens-iac-cost-security-scanner) and use the "Use latest version" button to auto-generate the snippet, or follow the steps below.
 
 ### Step 1 — Add the workflow to your repo
 
