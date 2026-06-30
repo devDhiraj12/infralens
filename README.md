@@ -1,14 +1,22 @@
 # 🔍 InfraLens
 
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-InfraLens-blue?logo=github)](https://github.com/marketplace/actions/infralens)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/devDhiraj12/infralens)](https://github.com/devDhiraj12/infralens/releases)
+
 **Know exactly what your Terraform or CloudFormation PR will do — before it merges.**
 
 InfraLens is a GitHub Action that analyzes your IaC plan and posts a structured impact summary directly on the pull request — resource changes, live AWS cost estimates, and security risk detection. All in one PR comment, zero setup beyond a workflow file.
+
+Supports Terraform and AWS CloudFormation. AWS only for now — Azure/GCP support is on the roadmap.
 
 → [Step by step setup guide](./SETUP_GUIDE.md)
 
 ---
 
 ## Quick Start
+
+You can find this action on the [GitHub Marketplace](https://github.com/marketplace/actions/infralens) and use the "Use latest version" button to auto-generate the snippet, or follow the steps below.
 
 ### Step 1 — Add the workflow to your repo
 
@@ -169,13 +177,15 @@ Works with AWS CloudFormation changesets too — not just Terraform.
 
 | Input | Required | Default | Description |
 |-------|----------|---------|-------------|
-| `plan-json-path` | Yes | `plan.json` | Path to Terraform plan JSON or CloudFormation changeset JSON |
+| `plan-json-path` | Yes | `plan.json` | Path to the `terraform show -json` or CloudFormation changeset JSON file |
 | `github-token` | Yes | — | GitHub token for posting PR comments — use `${{ secrets.GITHUB_TOKEN }}` |
-| `plan-type` | No | `terraform` | `terraform` or `cloudformation` |
-| `block-on-high` | No | `true` | Fail CI if HIGH severity findings exist. Set `false` to warn only |
-| `aws-access-key-id` | No | — | AWS credentials for live cost estimation |
-| `aws-secret-access-key` | No | — | AWS credentials for live cost estimation |
-| `aws-region` | No | `us-east-1` | AWS region for cost estimation — should match your deployment region |
+| `plan-type` | No | `terraform` | Type of IaC plan — `terraform` or `cloudformation` |
+| `github-repository` | No | `${{ github.repository }}` | GitHub repository in `owner/repo` format |
+| `github-pr-number` | No | `${{ github.event.pull_request.number }}` | Pull request number |
+| `block-on-high` | No | `true` | Fail the CI check if HIGH severity security findings exist |
+| `aws-access-key-id` | No | — | AWS Access Key ID for live cost estimation |
+| `aws-secret-access-key` | No | — | AWS Secret Access Key for live cost estimation |
+| `aws-region` | No | `us-east-1` | AWS region for cost estimation |
 
 ---
 
@@ -299,6 +309,7 @@ Open an issue before starting large changes.
 - Fail CI on HIGH severity findings (`block-on-high: false` to opt out)
 - Custom security rules via `.infralens.yml`
 - CloudFormation changeset support
+- Published on GitHub Marketplace
 
 **v1**
 - Terraform plan parsing
