@@ -1,4 +1,4 @@
-name: 'InfraLens'
+name: 'InfraLens - IaC Cost & Security Scanner'
 description: 'Analyzes Terraform plan and posts resource changes, cost estimates, and security risks as a PR comment'
 author: 'devDhiraj12'
 
